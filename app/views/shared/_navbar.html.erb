@@ -19,11 +19,8 @@
             <li class="nav-item">
               <%= link_to 'Registro', new_user_registration_path, class:'nav-link'%></li>
           <% end %>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
       </ul>
-      <form class="d-flex" role="search">
+      <form class="d-flex">
         <div class="text-light">
           <% if user_signed_in? %>
             Hola <%=current_user.name%>
