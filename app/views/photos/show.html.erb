@@ -1,44 +1,46 @@
 <p style="color: green"><%= notice %></p>
 <div class="row">
-  <div class="col-md-4 col-12 offset-md-2">
+  <div class="col-md-7 mx-auto">
     <%= render @photo %>
+  <% if user_signed_in? %>
+    <div class="d-flex justify-content-center">
+      <%= link_to "<", photos_path, class: 'btn btn-outline-primary m-2' %>
+      <%= link_to "Editar Foto", edit_photo_path(@photo), class: 'btn btn-outline-primary m-2' %>
+      <%= button_to "Eliminar Foto", @photo, method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger m-2' %>
+    </div>
+  <% end %>
   </div>
-  <div class="col-md-4 col-12">
+  <div class="col-md-7 mx-auto">
     <h4>Comentarios</h4>
-    <% if user_signed_in? %>
-      <form action="/comments" method="POST">
-      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-        <input type="hidden" name="photo_id" value="<%=@photo.id%>">
-        <div>
-          <label for="content">Comenta acá:</label>
-          <input type="text" name="content" id="content" required>
-        </div>
-        <input type="submit" value="Comentar" class="btn btn-success">
-      </form>
-    <% end %>
-
-    <ul class="list-group">
+    <ul class="list-group mt-4">
       <%@photo.comments.each do |c|%>
         <li class="list-group-item">
           <div class="row">
-            <div class="col-8">
-              <p><b><%=c.content%></b></p>
-              <p><%=c.user.name%></p>
+            <div class="col">
+              <img src="<%=c.user.avatar%>" width="80" alt="" class="d-block rounded-circle">
             </div>
-            <div class="col-4 p-1">
-              <img src="<%=c.user.avatar%>" alt="" class="w-100 d-block rounded-circle">
+            <div class="col-10">
+              <b><%=c.user.name%></b>
+              <p><%=c.content%></p>
             </div>
           </div>
         </li>
       <% end %>
     </ul>
+    <% if user_signed_in? %>
+      <div class="mt-4">
+        <form action="/comments" method="POST">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="photo_id" value="<%=@photo.id%>">
+          <div>
+            <label for="content">Comenta acá:</label>
+            <div class="d-flex mt-2">
+              <input type="text" name="content" class="form-control" list="datalistOptions" id="content" placeholder="Escribe tu comentario..." required >
+              <input type="submit" value="Comentar" class="btn btn-success ms-2">
+            </div>
+          </div>
+        </form>
+      </div>
+    <% end %>
   </div>
 </div>
-<% if user_signed_in? %>
-<div>
-  <%= link_to "Edit this photo", edit_photo_path(@photo) %> |
-  <%= link_to "Back to photos", photos_path %>
-
-  <%= button_to "Destroy this photo", @photo, method: :delete %>
-</div>
-<% end %>
